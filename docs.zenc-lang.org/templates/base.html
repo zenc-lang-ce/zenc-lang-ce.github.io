@@ -1328,23 +1328,6 @@
                 </div>
             </div>
 
-            <div class="sidebar-group" id="group-examples">
-                <div class="sidebar-header" onclick="toggleSidebarGroup('group-examples')">
-                    <div class="sidebar-title">{{ trans(key="examples-title", lang=lang) }}</div>
-                    <svg class="chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="6 9 12 15 18 9"></polyline>
-                    </svg>
-                </div>
-                <div class="sidebar-links">
-                    {% set examples_section = get_section(path="examples/rosetta/_index.md", lang=lang) %}
-                    {% for p in examples_section.pages | sort(attribute="title") %}
-                    <a href="{{ p.permalink }}" class="sidebar-link {% if current_path == p.path %}active{% endif %}">
-                        {{ p.title }}
-                    </a>
-                    {% endfor %}
-                </div>
-            </div>
 
         </aside>
 
@@ -1476,7 +1459,7 @@
             };
 
             // Initialize sidebar states
-            ['group-start', 'group-migrations', 'group-tour', 'group-std', 'group-examples'].forEach(id => {
+            ['group-start', 'group-migrations', 'group-tour', 'group-std'].forEach(id => {
                 const group = document.getElementById(id);
                 if (!group) return;
                 // Check if any link inside is active
@@ -1488,9 +1471,6 @@
                     group.classList.remove('collapsed');
                 } else if (storedState === 'true') {
                     // Respect user preference if explicitly collapsed
-                    group.classList.add('collapsed');
-                } else if (storedState === null && id === 'group-examples') {
-                    // Collapse examples by default if no preference
                     group.classList.add('collapsed');
                 }
             });

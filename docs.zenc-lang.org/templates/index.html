@@ -189,75 +189,6 @@
     }
 
     /* ── Featured Snippets ─────────────────── */
-    .snippets-section {
-        width: 100%;
-        margin-bottom: 4rem;
-    }
-
-    .snippets-header {
-        font-family: 'JetBrains Mono', monospace;
-        font-size: 0.85rem;
-        color: var(--secondary);
-        margin-bottom: 1.5rem;
-        padding-bottom: 0.75rem;
-        border-bottom: 1px solid var(--border);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.75rem;
-    }
-
-    .snippets-grid {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 1.25rem;
-    }
-
-    .snippet-card {
-        background: var(--surface);
-        border: 1px solid var(--border);
-        border-radius: 12px;
-        padding: 1.25rem;
-        text-decoration: none;
-        color: var(--fg);
-        transition: all 0.2s ease;
-        display: flex;
-        flex-direction: column;
-        gap: 0.5rem;
-        position: relative;
-    }
-
-    .snippet-card:hover {
-        border-color: var(--primary);
-        transform: translateY(-4px);
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
-    }
-
-    .snippet-name {
-        font-family: 'JetBrains Mono', monospace;
-        font-size: 0.85rem;
-        font-weight: 800;
-        color: var(--primary);
-    }
-
-    .snippet-desc {
-        font-size: 0.78rem;
-        color: var(--secondary);
-        line-height: 1.55;
-    }
-
-    .snippet-tag {
-        position: absolute;
-        top: 0;
-        right: 0;
-        background: var(--border);
-        color: var(--secondary);
-        font-size: 0.6rem;
-        padding: 4px 10px;
-        border-bottom-left-radius: 8px;
-        font-family: 'JetBrains Mono', monospace;
-        opacity: 0.7;
-    }
 
     /* ── Std Lib Grid ──────────────────────── */
     .stdlib-section {
@@ -301,11 +232,6 @@
     }
 
     /* ── Responsive ────────────────────────── */
-    @media (max-width: 1024px) {
-        .snippets-grid {
-            grid-template-columns: repeat(2, 1fr);
-        }
-    }
 
     @media (max-width: 860px) {
         .btree-level {
@@ -333,9 +259,7 @@
     }
 
     @media (max-width: 500px) {
-        .snippets-grid {
-            grid-template-columns: 1fr;
-        }
+
 
         .docs-index {
             padding: 2rem 1.25rem 3rem;
@@ -395,38 +319,9 @@
                 </div>
             </a>
 
-            <!-- Examples -->
-            <a href="{{ get_url(path="examples/rosetta/", lang=lang) }}" class="btree-child">
-                <div class="btree-vpipe"></div>
-                <div class="snode">
-                    <div class="snode-head"><span class="kw">struct</span> Examples {</div>
-                    <div class="snode-body">
-                        &nbsp;&nbsp;{{ trans(key="examples-source", lang=lang) }}: <span class="typ">string</span> =
-                        <span class="str">"Rosetta"</span>;<br>
-                        &nbsp;&nbsp;{{ trans(key="examples-count", lang=lang) }}: <span class="typ">u16</span> = <span
-                            class="str">127</span>;<br>
-                        }
-                    </div>
-                    <div class="snode-foot"><span class="kw">{{ trans(key="examples-explore", lang=lang) }}</span></div>
-                </div>
-            </a>
         </div>
     </div>
 
-    <!-- Featured Snippets -->
-    <div class="snippets-section">
-        <div class="snippets-header">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="16 18 22 12 16 6" />
-                <polyline points="8 6 2 12 8 18" />
-            </svg>
-            <span class="cm">{{ trans(key="featured-examples", lang=lang) }}</span>
-        </div>
-        <div class="snippets-grid" id="snippets-grid">
-            <!-- JS populates this -->
-        </div>
-    </div>
 
     <!-- Standard Library Imports -->
     <div class="stdlib-section" id="stdlib">
@@ -457,36 +352,5 @@
     </div>
 </div>
 
-<script>
-    (function () {
-        var pool = [
-            {% set rosetta = get_section(path = "examples/rosetta/_index.md", lang = lang) %}
-        {% for page in rosetta.pages %}
-    { url: "{{ page.permalink | safe }}", title: "{{ page.title | safe }}" },
-    {% endfor %}
-    ];
-
-    // Shuffle
-    for (var i = pool.length - 1; i > 0; i--) {
-        var j = Math.floor(Math.random() * (i + 1));
-        var t = pool[i]; pool[i] = pool[j]; pool[j] = t;
-    }
-
-    var grid = document.getElementById('snippets-grid');
-    var picked = pool.slice(0, 4);
-
-    picked.forEach(function (ex) {
-        var fname = ex.title.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/_+$/, '') + '.zc';
-        var a = document.createElement('a');
-        a.href = ex.url;
-        a.className = 'snippet-card';
-        a.innerHTML =
-            '<span class="snippet-tag">zc</span>' +
-            '<span class="snippet-name">' + fname + '</span>' +
-            '<span class="snippet-desc">' + ex.title + '</span>';
-        grid.appendChild(a);
-    });
-    }) ();
-</script>
 
 {% endblock content %}
