@@ -4,6 +4,10 @@ on:
   push:
     branches:
       - main
+  # The documentation comes from zenc-docs, which cannot trigger this workflow without a
+  # token: rebuild every hour to pick up its changes.
+  schedule:
+    - cron: '17 * * * *'
   workflow_dispatch: {}
 
 permissions:
@@ -22,6 +26,12 @@ jobs:
       - name: Get latest code
         uses: actions/checkout@v4
 
+      - name: Get the documentation
+        uses: actions/checkout@v4
+        with:
+          repository: zenc-lang-ce/zenc-docs
+          path: zenc-docs
+
       - name: Set up Pages
         id: pages
         uses: actions/configure-pages@v5
@@ -29,6 +39,11 @@ jobs:
       - name: Generate Playground Examples
         run: |
           python3 scripts/generate_playground_examples.py
+
+      - name: Copy the documentation into the site
+        run: |
+          pip install unidecode
+          scripts/sync_docs.sh zenc-docs
 
       - name: Build Zola Docs
         # The docs are served under /docs of the Pages site.
